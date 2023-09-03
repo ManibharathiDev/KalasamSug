@@ -35,6 +35,9 @@ class KCallRegister extends Model
         'staff_id',
         'status',
         'remarks',
+        'serialNo',
+        'Ncalldate',
+        'billtype',
         'completeperson',
         'completeddate',);
     }

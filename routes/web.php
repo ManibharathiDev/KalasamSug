@@ -20,12 +20,14 @@ Route::get('/', function () {
 Route::post('/addNewUser',[APIController::class,'addNewUser'])->name('adduser');
 Route::get('/registerform',[APIController::class,'registerform'])->name('register');
 Route::get('/loginpage',[ApiController::class,'loginpage'])->name('loginpage');
-Route::post('/login',[ApiController::class,'login'])->name('login');
+//Route::post('/login',[ApiController::class,'login'])->name('login');
 Route::get('/addcust',[APiController::class,'addcust'])->name('addcust');
 Route::post('/addcustomer',[APIController::class,'addcustomer'])->name('customer');
 Route::get('/addcall',[APiController::class,'addcall'])->name('addcall');
 Route::post('/callregister',[APIController::class,'callregister'])->name('callRegister');
+Route::post('/updateregister',[APIController::class,'updateregister'])->name('updateregister');
 Route::get('/custReport',[APiController::class,'custReport'])->name('custReport');
 Route::post('/CallsReport',[APIController::class,'CallsReport'])->name('CallsReport');
 Route::get('/UpdateCalls/{id}',[APIController::class,'UpdateCalls'])->name('editcalls');
-Route::post('login',[ApiController::class,'login'])->name('login');
+Route::post('homepage',[ApiController::class,'homepage'])->name('home');
+Route::get('home',[ApiController::class,'home'])->name('home1');

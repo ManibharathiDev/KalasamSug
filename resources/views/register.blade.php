@@ -12,7 +12,12 @@
   <tr><td>Email Id </td><td><input type = "text" name = "email" id = "email"/></td></tr>
   <tr><td>Password </td><td><input type = "password " name = "password" id = "password"/></td></tr>
   <tr><td>Con password </td><td><input type = "password " name = "password" id = "password"/></td></tr>
-  <tr><td><input type="submit" name="submit"></td></tr>
+  <tr><td>Con password </td><td><select id="usertype" name="usertype">
+        <option>Select</option>
+        <option value="admin">admin</option>
+        <option value="user">user</option> 
+</select></td></tr>
+  <tr><td></td><td align="center"><input type="submit" name="submit"></td></tr>
 </table>
 </form>
 </body>

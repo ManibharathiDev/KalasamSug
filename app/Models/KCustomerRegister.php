@@ -18,6 +18,7 @@ class KCustomerRegister extends Model
         'gstno',
         'refname',
         'pack',
+        'type',
     ];
     public function custname()
     {

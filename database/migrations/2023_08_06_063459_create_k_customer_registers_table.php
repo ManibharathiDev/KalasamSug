@@ -16,12 +16,13 @@ return new class extends Migration
             $table->string('comname');
             $table->string('name');
             $table->string('phone');
-            $table->string('mobile');
-            $table->string('email');
-            $table->string('serialNo');
-            $table->string('gstno');
-            $table->string('refname');
-            $table->string('pack');
+            $table->string('mobile')->nullable()->default(NULL);
+            $table->string('email')->nullable()->default(NULL);
+            $table->string('serialNo')->nullable()->default(NULL);
+            $table->string('gstno')->nullable()->default(NULL);
+            $table->string('refname')->nullable()->default(NULL);
+            $table->string('pack')->nullable()->default(NULL);
+            $table->string('type')->nullable()->default(NULL);
             $table->timestamps();
         });
     }

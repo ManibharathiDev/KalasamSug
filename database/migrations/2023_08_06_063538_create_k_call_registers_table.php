@@ -25,6 +25,9 @@ return new class extends Migration
             ->onDelete('cascade');
             $table->string('status');
             $table->string('remarks');
+            $table->string('serialNo')->nullable()->default(NULL);
+            $table->string('Ncalldate')->nullable()->default(NULL);
+            $table->string('billtype')->nullable()->default(NULL);
             $table->string('completeperson')->nullable()->default(NULL);
             $table->string('completeddate')->nullable()->default(NULL);
             $table->timestamps();

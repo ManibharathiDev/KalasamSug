@@ -19,7 +19,7 @@
 </head>
 <body>
   <marquee><h1>KALASAM INFO TECH</h1></marquee>
-<form class="form" method="POST" name="login" action="{{route('login')}}">
+<form class="form" method="POST" name="login" action="{{route('home')}}">
   <h3 align="center"> Login </h3>
   {{csrf_field()}}
  <table class="center" border="1">
