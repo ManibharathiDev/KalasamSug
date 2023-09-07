@@ -41,16 +41,12 @@
  <a href="{{route('addcall')}}">Call Register</a>
  <a href="{{route('custReport')}}">Calls Report</a>
  <a href="{{route('addcust')}}">Add Customer</a>
- <a href="{{route('loginpage')}}">LogOut</a>
+ <a href="{{route('logout')}}">LogOut</a>
 </div>
 <h1 align="center"> KALASAM INFO TECH </h1>
 <h2 align="center"> Call Register </h2>
-<h3><ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">Sign out</a></li>
-</ul></h3>
 <table border=1 align="center">
-<tr><td>Date</td><td><input type="date" id="Date" name="Date" value="{{$calls->date}}"></td></tr>
+<!-- <tr><td>Date</td><td><input type="date" id="Date" name="Date" value="{{$calls->date}}"></td></tr> -->
 <tr><td>Company Name</td><td><select name="cust_id" id= "cust_id" cols="25" readonly>
         <option value ="{{$calls->cust_id}}">{{$cust->comname}}
   </select>   
@@ -58,7 +54,7 @@
 <tr><td>Contact Person</td><td><input type="name" id="conperson" name="conperson" value="{{$calls->conperson}}" readonly></td></tr>
 <tr><td>Work</td><td><input type="name" id="work" name="work" value="{{$calls->work}}" readonly></td></tr>
 <tr><td>Staff name</td><td><select name="staff_id" id= "staff_id">
-  <option value ="{{$calls->staff_id}}">{{$data->name}}
+  <option value ="{{$calls->staff_id}}">{{$data1->name}}
   </select> 
   </td></tr>
 <tr><td>Status</td></td><td><select name="status" id= "status">
@@ -67,14 +63,14 @@
 </select> 
 </td></tr>
 <tr><td>Remarks</td><td><textarea id="remarks" name="remarks" rows="4" cols="50">{{$calls->remarks}}</textarea></td></tr>
-<tr><td>Completeperson</td><td><input type="name"  id="completeperson" name="completeperson"></td></tr>
-<tr><td>Completeddate</td><td><input type="date"  id="completeddate" name="completeddate"></td></tr>
+<tr><td>serialNo</td><td><input type="name" id="serialNo" name="serialNo" rows="4" cols="50" value="{{$calls->serialNo}}"></td></tr>
+<tr><td>Call Back Date</td><td><input type="datetime" id="Ncalldate" name="Ncalldate"></td></tr>
+<tr><tr><td>Bill Type</td><td><input type="billtype" id="billtype" name="billtype" value="{{$calls->billtype}}">     
+<tr><tr><td>Software</td><td><input type="name" id="software" name="software" value="{{$calls->software}}">
+<tr><td>Completeperson</td><td><input type="name"  id="completeperson" name="completeperson" value="{{$data->name}}"></td></tr>
+<tr><td>Completeddate</td><td><input type="datetime"  id="completeddate" name="completeddate"></td></tr>
 <tr><td></td><td align="center"><input type="submit" name="save"></td></tr>
 </table>
-<ol>
-  <li><a href="{{route('home1')}}">Home Page</a></li>
-  <li><a href="{{route('custReport')}}">Calls Report</a></li>
-</ol>
 </form>
 </body>
 </html>

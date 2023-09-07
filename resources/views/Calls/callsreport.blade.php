@@ -9,8 +9,6 @@
   background-color: #333;
   overflow: hidden;
 }
-
-/* Style the links inside the navigation bar */
 .topnav a {
   float: left;
   color: #f2f2f2;
@@ -19,14 +17,10 @@
   text-decoration: none;
   font-size: 17px;
 }
-
-/* Change the color of links on hover */
 .topnav a:hover {
   background-color: #ddd;
   color: black;
 }
-
-/* Add a color to the active/current link */
 .topnav a.active {
   background-color: #04AA6D;
   color: white;
@@ -41,7 +35,7 @@
  <a href="{{route('addcall')}}">Call Register</a>
  <a class="active" href="{{route('custReport')}}">Calls Report</a>
  <a href="{{route('addcust')}}">Add Customer</a>
- <a href="{{route('loginpage')}}">LogOut</a>
+ <a href="{{route('logout')}}">LogOut</a>
 </div>
 <h1 align="center"> KALASAM INFO TECH </h1>
 <h2 align="center"> Calls Report </h2>
@@ -51,17 +45,22 @@
 <option value="All">All</option>
        @foreach($cust as $row)
            <Option value ="{{$row->id}}">{{$row->comname}}
-        @endforeach       
-</select>  
-
+        @endforeach     
+</select> 
+<label>Customer Phone No</label><select name="phoneno" id= "phoneno" cols="25">
+<option value="All">All</option>
+        @foreach($phoneno as $row)
+           <option value ="{{$row->phoneno}}">{{$row->phoneno}}
+        @endforeach        
+</select> 
 <label> Call Status</label><select name="status" id= "status" cols="25">
-         <option value="All">All</option>
          <option value="Pending">Pending</option>
          <option value="Completed">Completed</option>      
 </select>    
 <label> Work </label><select name="work" id= "work" cols="25">
-         <option value="All">All</option>
          <option value="Tally Support">Tally Support</option>
+         <option value="Busy Support">Busy Support</option>
+         <option value="Busy Customization">Busy Customization</option>
          <option value="TSS Renewal">TSS Renewal</option> 
          <option value="AMC Renewal">AMC Renewal</option>
          <option value="TDL Customization">TDL Customization</option>
@@ -71,6 +70,14 @@
          <option value="Tally Conversation">Tally Conversation</option>
          <option value="Release update">Release update</option>      
 </select> 
+<label> Bill Type</label><select name="billtype" id= "billtype" cols="25">
+        <option value="AMC">AMC</option>
+        <option value="NoAMC">No AMC</option>       
+</select>  
+<label> Software</label><select name="software" id= "software" cols="25">
+<option value="Tally">Tally</option>
+        <option value="Busy">Busy</option>       
+</select>  
 <input type="submit" name="submit">
 <table border=1 class="css-serial">
  <tr><th>SNo</th>
@@ -89,9 +96,12 @@
  <th>Completed Date</th>
  <th>Action</th>
 </tr>
+@php
+ $i = 1;
+@endphp
  @foreach($calls as $row)
  <tr>
- <td>&nbsp;</td>
+ <td>{{$i++}}</td>
  <td>{{$row->Date}}</td>
  <td>{{$row->cust_id}}</td>
  <td>{{$row->phoneno}}</td>

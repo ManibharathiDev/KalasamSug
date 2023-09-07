@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('k_customer_registers', function (Blueprint $table) {
-            $table->text('software')->after('billtype');
+        
+        Schema::table('k_call_registers', function (Blueprint $table) {
+            $table->datetime('Date')->change();
+            $table->datetime('completeddate')->change();
         });
-
     }
 
     /**

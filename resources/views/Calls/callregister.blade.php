@@ -22,8 +22,6 @@
   background-color: #ddd;
   color: black;
 }
-
-/* Add a color to the active/current link */
 .topnav a.active {
   background-color: #04AA6D;
   color: white;
@@ -38,12 +36,12 @@
  <a class="active" href="{{route('addcall')}}">Call Register</a>
  <a href="{{route('custReport')}}">Calls Report</a>
  <a href="{{route('addcust')}}">Add Customer</a>
- <a href="{{route('loginpage')}}">LogOut</a>
+ <a href="{{route('logout')}}">LogOut</a>
 </div>
 <h1 align="center"> KALASAM INFO TECH </h1>
 <h2 align="center"> Call Register </h2>
 <table border=1 align="center">
-<tr><td>Date</td><td><input type="date" id="Date" name="Date"></td></tr>
+<!-- <tr><td>Date</td><td><input type="date" id="Date" name="Date"></td></tr> -->
 <tr><td>Company Name</td><td><select name="cust_id" id= "cust_id" cols="25">
            <option> Select </option>
        @foreach($cust as $row)
@@ -63,15 +61,14 @@
         <option value="New Project">New Project </option>
         <option value="New Pack">New Pack</option> 
         <option value="Tally Conversation">Tally Conversation</option>
-        <option value="Release update">Release update</option>      
+        <option value="Release update">Release update</option>
+        <option value="Busy Support">Busy Support</option>
+         <option value="Busy Customization">Busy Customization</option>     
     </select> 
     </td></tr>
   <tr><td>Staff name</td><td><select name="staff_id" id= "staff_id">
-         <option>select</option>
-        @foreach($data as $row)
-           <option value ="{{$row->id}}">{{$row->name}}
-        @endforeach
-    </select> 
+         <option value ="{{$data->id}}">{{$data->name}}
+        </select> 
     </td></tr>
   <tr><td>Status</td></td><td><select name="status" id= "status">
          <option value="Pending">Pending</option>
@@ -79,12 +76,17 @@
     </select> 
   </td></tr>
   <tr><td>Remarks</td><td><textarea id="remarks" name="remarks" rows="4" cols="50"></textarea></td></tr>
-  <tr><td>serialNo</td><td><textarea id="serialNo" name="serialNo" rows="4" cols="50"></textarea></td></tr>
-  <tr><td>Call Back Date</td><td><textarea id="date" name="Ncalldate" name="Ncalldate"></textarea></td></tr>
-  <tr><tr><td>Bill Type</td><td><select id="type" name="type">
+  <tr><td>serialNo</td><td><input type="name" id="serialNo" name="serialNo" rows="4" cols="50"></textarea></td></tr>
+  <tr><td>Call Back Date</td><td><input type="date" id="date" name="Ncalldate" name="Ncalldate"></textarea></td></tr>
+  <tr><tr><td>Bill Type</td><td><select id="billtype" name="billtype">
         <option value="AMC">AMC</option>
-        <option value="NoAMC">No AMC</option> 
+        <option value="Free Support">Free Support</option> 
+        <option value="Billing">Billing</option>
 </select></td></tr>
+ <tr><tr><td>Software</td><td><select id="software" name="software">
+        <option value="Tally">Tally</option>
+        <option value="Busy">Busy</option> 
+ </select></td></tr>
   <tr><td>Completeperson</td><td><input type="name"  id="completeperson" name="completeperson"></td></tr>
   <tr><td>Completeddate</td><td><input type="date"  id="completeddate" name="completeddate"></td></tr>
   <tr><td><a href="{{route('home1')}}">Home Page</a></td><td align="center"><input type="submit" name="save"></td></tr>

@@ -8,6 +8,7 @@ use App\Models\KCallRegister;
 use App\Models\KstaffDtls;
 use App\Models\KCustomerRegister;
 use Validator;
+use Session;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 
 class APIController extends Controller
 {
-    //
+  
     public function userregistration(Request $request)
     {
         try
@@ -26,8 +27,7 @@ class APIController extends Controller
             $result = array();
             $result['success'] = 1;
             $result['data']=$user;
-            return json_encode($result);
-           
+            return json_encode($result);           
         }
         catch(\Exception $e)
         {
@@ -39,17 +39,20 @@ class APIController extends Controller
     }
     public function homepage(Request $request)
     {
-        if(Auth::attempt(['name'=>$request->name,'password'=>$request->password]))
+         $user = User::where('name','=',$request->name)->first();
+        if($user)
         {
-            $user = Auth::user();
-            $str_random=Str::random(12);
-            return view('homepage',compact('str_random'));
-            return json_encode($user);
-        }
-        else
-        {
-            echo "Invalid Login";
-        }    
+            if(Hash::check($request->password,$user->password))
+            {
+                $request->session()->put('loginId',$user->id);
+                return redirect('home');
+            }
+            else{
+                return back()->with('fail','Password not matches.');
+            }
+        }else{
+            return back()->with('fail','user name is not registered.');
+        }          
     }
     public function registerform() 
     { 
@@ -63,48 +66,89 @@ class APIController extends Controller
     }
     public function home() 
     { 
-	    $str_random=Str::random(12);
-	    return view('homepage',compact('str_random'));
+        $data = array();
+        if(Session::has('loginId')){
+            $data=User::where('id','=',Session::get('loginId'))->first();
+        }
+	    // $str_random=Str::random(12);
+	    return view('homepage',compact('data'));
+    }
+    public function homelogout() 
+    { 
+        if(Session::has('loginId')){
+            Session::pull('loginId');
+            //return redirect('home')->with('success','you logout successfully');
+        }
+        return view('welcome')->with('success','you logout successfully');
     }
     public function addcust() 
     { 
+        $data = array();
+        if(Session::has('loginId')){
+            $data=User::where('id','=',Session::get('loginId'))->first();
+        }
 	    $str_random=Str::random(12);
-	    return view('Customer/addcustomer',compact('str_random'));
+	    return view('Customer/addcustomer',compact('data'));
     }
     public function custReport() 
     { 
-         $calls = KCallRegister::get();
-         $cust=KCustomerRegister::all();
-         $data=User::all();
-         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust]);
+        $data = array();
+        if(Session::has('loginId')){
+            $data=User::where('id','=',Session::get('loginId'))->first();
+        }
+         $calls= KCallRegister::whereDay('Date', now()->day)->get();
+         $calls1= KCallRegister::get();
+         $cust = KCustomerRegister::all();
+         $phoneno = KCallRegister::distinct()->whereNotNull('phoneno')->get(['phoneno']);
+         //echo($phone);
+         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust,'phoneno'=>$phoneno]);
     }
     public function addcall()
     { 
+        $data = array();
+        if(Session::has('loginId')){
+            $data=User::where('id','=',Session::get('loginId'))->first();
+        }
 	    $str_random=Str::random(12);
         $cust=KCustomerRegister::all();
-        $data=User::all();
-        return view('Calls/callregister',compact('str_random'),['cust'=>$cust,'data'=>$data]);
+        //$data=User::all();
+        return view('Calls/callregister',compact('data'),['cust'=>$cust]);
     }    
     public function addNewUser(Request $request)
     {
-        $user = new User;
-        $user->name = $request->name;
-        $user->email= $request->email;
-        $user->password=bcrypt($request->password);
-        $user->confirpassword=bcrypt($request->confirpassword);
-        $user->usertype=$request->usertype;
-        $user->save();
-        $str_random=Str::random(12);
-	    return view('welcome',compact('str_random'));
-        echo "Register Successfully";
+        $test2 = User::where('name',$request->name)
+        ->get();
+        if(count($test2)>0)
+        {
+            echo "Already available";
+            return;
+        }
+        try
+        {
+            $user = new User;
+            $user->name = $request->name;
+            $user->email= $request->email;
+            $user->password=$request->password;
+            $user->confirpassword=$request->password;
+            $user->usertype=$request->usertype;        
+            $res=$user->save();
+            if($res){
+                return view('welcome')->with('success','you have register successfully');
+            }
+            else{
+                return back()->with('fail','something wrong');
+            }
+        }
+        catch(\Exception $e)
+        {
+            $result = array();
+            $result['success'] = 0;
+            $result['data']=$e;
+            return json_encode($result);
+        }
     }
     public function addcustomer(Request $request)
     {
-        //$test=KCustomerRegister::whereget('comname');
-        //print_r($test);
-        //$test1=$request->comname;
-        //echo($test);
-        //echo($test1);
         $test2 = KCustomerRegister::where('comname',$request->comname)
         ->get();
         if(count($test2)>0)
@@ -126,21 +170,20 @@ class APIController extends Controller
             $cust->refname = $request->refname;
             $cust->pack = $request->pack;
             $cust->type=$request->type;
+            $cust->software=$request->software;
             //print_r($cust);
             $cust->save();
             DB::commit();	
             $str_random=Str::random(12);
-            $cust=KCustomerRegister::all();
-            $data=User::all();
-            return view('Calls/callregister',compact('str_random'),['cust'=>$cust,'data'=>$data]);
-            }
-            catch(\Exception $e)
-            {
-                $result = array();
-                $result['success'] = 0;
-                $result['data']=$e;
-                return json_encode($result);
-            }
+            return view('Customer/addcustomer',compact('str_random'));
+        }
+        catch(\Exception $e)
+        {
+            $result = array();
+            $result['success'] = 0;
+            $result['data']=$e;
+            return json_encode($result);
+        }
         
     }
     public function callregister(Request $request)
@@ -150,7 +193,7 @@ class APIController extends Controller
             DB::beginTransaction();
             $calls = new KCallRegister;
             $calls->cust_id=$request->cust_id;
-            $calls->Date = date('dMY');
+            $calls->Date = date('Y-m-d H:i:s');
             $calls->phoneno=$request->phoneno;
             $calls->conperson=$request->conperson;
             $calls->work=$request->work;
@@ -160,13 +203,20 @@ class APIController extends Controller
             $calls->serialNo=$request->serialNo;
             $calls->Ncalldate=$request->Ncalldate;
             $calls->billtype=$request->billtype;
+            $calls->software=$request->software;
             $calls->completeperson=$request->completeperson;
             $calls->completeddate=$request->completeddate;
             //print_r($calls);
             $calls->save();
             DB::commit();	
             $str_random=Str::random(12);
-	        return view('Calls/callregister',compact('str_random'));
+            $cust=KCustomerRegister::all();
+            $data = array();
+            if(Session::has('loginId')){
+                 $data=User::where('id','=',Session::get('loginId'))->first();
+            }
+            return view('Calls/callregister',compact('data'),['cust'=>$cust]);
+          
         }
         catch(\Exception $e)
         {
@@ -178,24 +228,36 @@ class APIController extends Controller
     }
     public function CallsReport(Request $request)
     {
-        $calls = KCallRegister::distinct()->whereNotNull('phoneno')->get(['phoneno'])
-        ->where('cust_id',$request->cust_id)
+        $Sdate = $request->FDate;
+        $Edate = $request->TDate;
+        $calls = KCallRegister::whereDate('Date','>=',$Sdate)
+        ->whereDate('Date','<=',$Edate)
+        ->orwhere('phoneno',$request->phoneno)
+        ->orwhere('cust_id',$request->cust_id)
         ->where('status',$request->status)
         ->where('work',$request->work)
-        ->where('type',$request->type)
-        ->get();
+        ->where('billtype',$request->billtype)
+        ->where('software',$request->software)
+        ->get();       
          $cust  = KCustomerRegister::all();
          $data  = User::all();
-         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust]);
-    }
+         $phoneno = KCallRegister::distinct()->whereNotNull('phoneno')->get(['phoneno']);
+         $cust1 = KCustomerRegister::where('id',$request->cust_id)
+         ->get();
+         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust,'cust1'=>$cust1,'phoneno'=>$phoneno]);
+     }
     public function UpdateCalls($id)
     {
         $calls = KCallRegister::find($id);
         $custid = $calls->cust_id;
         $staffid = $calls->staff_id;        
         $cust  = KCustomerRegister::find($custid);
-        $data  = User::find($staffid);
-        return view('Calls/editcallsregister',compact('calls'),['data'=>$data,'cust'=>$cust]);
+        $data1 = User::find($staffid);
+        $data = array();
+        if(Session::has('loginId')){
+            $data=User::where('id','=',Session::get('loginId'))->first();
+        }
+        return view('Calls/editcallsregister',compact('calls'),['data'=>$data,'cust'=>$cust,'data1'=>$data1]);
     }
     public function updateregister(Request $request)
     {
@@ -204,20 +266,24 @@ class APIController extends Controller
             DB::beginTransaction();
             $calls = new KCallRegister;
             $calls->cust_id=$request->cust_id;
-            $calls->Date = date('dMY');
+            $calls->Date = date('Y-m-d H:i:s');
             $calls->phoneno=$request->phoneno;
             $calls->conperson=$request->conperson;
             $calls->work=$request->work;
             $calls->staff_id=$request->staff_id;
             $calls->status=$request->status;
             $calls->remarks=$request->remarks;
+            $calls->serialNo=$request->serialNo;
+            $calls->Ncalldate=$request->Ncalldate;
+            $calls->billtype=$request->billtype;
+            $calls->software=$request->software;
             $calls->completeperson=$request->completeperson;
             $calls->completeddate=$request->completeddate;
             //print_r($calls);
             $calls->save();
-            DB::commit();	
+            DB::commit();
             $str_random=Str::random(12);
-	        return view('Calls/callsreport',compact('str_random'));
+	        return view('home',compact('str_random'));
         }
         catch(\Exception $e)
         {

@@ -38,7 +38,7 @@
  <a href="{{route('addcall')}}">Call Register</a>
  <a href="{{route('custReport')}}">Calls Report</a>
  <a class="active" href="{{route('addcust')}}">Add Customer</a>
- <a href="{{route('loginpage')}}">LogOut</a>
+ <a href="{{route('logout')}}">LogOut</a>
 </div>
 <h1 align="center"> KALASAM INFO TECH </h1>
 <h2 align="center"> Add Customer </h2>
@@ -56,6 +56,10 @@
         <option value="AMC">AMC</option>
         <option value="NoAMC">No AMC</option> 
 </select></td></tr>
+<tr><tr><td>Software</td><td><select id="software" name="software">
+        <option value="Tally">Tally</option>
+        <option value="Busy">Busy</option> 
+ </select></td></tr>
   <tr><td><a href="{{route('home1')}}">Home Page</a></td><td align="center"><input type="submit" name="save"></td></tr>
 </table>
 </form>

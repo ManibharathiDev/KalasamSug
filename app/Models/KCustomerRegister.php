@@ -24,6 +24,10 @@ class KCustomerRegister extends Model
     {
         return $this->hasOne(KCallRegister::class,'cust_id','id');
     }
+    public function mycust()
+    {
+        return $this->hasMany(KCallRegister::class,'cust_id','id');
+    }
     public function custnames()
     {
         return $this->hasMany(KCallRegister::class, 
