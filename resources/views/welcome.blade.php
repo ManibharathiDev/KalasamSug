@@ -97,15 +97,14 @@ span.forgotpsd a {
 </head>
 <body>
     <h1>Kalasam Info Tech</h1>
-    <form method="POST" action="{{route('home')}}">
-    {{csrf_field()}}
-        <!-- Headings for the form -->
-        @if(Session::has('success'))
+    @if(Session::has('success'))
           <div class="alert-success">{{Session::get('success')}}</div>
         @endif
         @if(Session::has('fail'))
           <div class="alert-danger">{{Session::get('fail')}}</div>
-        @endif
+        @endif 
+    <form method="POST" action="{{route('home')}}">
+      {{csrf_field()}}        
           <div class="headingsContainer">
             <h3>Sign in</h3>
             <p>Sign in with your username and password</p>

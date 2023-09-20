@@ -19,6 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::post('/addNewUser',[APIController::class,'addNewUser'])->name('signup');
-Route::get('/registerform',[APIController::class,'registerform'])->name('register');
+//Route::get('/registerform',[APIController::class,'registerform'])->name('register');
 Route::post('/login',[ApiController::class,'login'])->name('login');
-Route::post('/addCustomer',[APIController::class,'addCustomer'])->name('addcust');
+Route::post('/addCustomer',[APIController::class,'addCustomer'])->name('addcustF');

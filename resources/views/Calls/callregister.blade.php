@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['name']))
+?>
 <!DOCTYPE html>
 <head>
   <title> Call Register</title>
@@ -42,15 +46,15 @@
 <h2 align="center"> Call Register </h2>
 <table border=1 align="center">
 <!-- <tr><td>Date</td><td><input type="date" id="Date" name="Date"></td></tr> -->
-<tr><td>Company Name</td><td><select name="cust_id" id= "cust_id" cols="25">
+<tr><td>Company Name *</td><td><select name="cust_id" id= "cust_id" cols="25">
            <option> Select </option>
        @foreach($cust as $row)
            <Option value ="{{$row->id}}">{{$row->comname}}
         @endforeach
 </select>  
 <a href="{{route('addcust')}}">Add Customer</a> 
-<tr><td>Phone No</td><td><input type="name" id="phoneno" name="phoneno">
-<tr><td>Contact Person</td><td><input type="name" id="conperson" name="conperson"></td></tr>
+<tr><td>Phone No *</td><td><input type="name" id="phoneno" name="phoneno">
+<tr><td>Contact Person *</td><td><input type="name" id="conperson" name="conperson"></td></tr>
 <tr><td>Work</td><td><select id="work" name="work">
         <option value="Tally Support">Tally Support</option>
         <option value="TSS Renewal">TSS Renewal</option> 
@@ -70,25 +74,31 @@
          <option value ="{{$data->id}}">{{$data->name}}
         </select> 
     </td></tr>
+    <tr><td>Call Allocation *</td><td><select name="callallocation" id= "callallocation">
+        @foreach($data1 as $row)
+           <Option value ="{{$row->name}}">{{$row->name}}
+        @endforeach
+        </select> 
+    </td></tr>
   <tr><td>Status</td></td><td><select name="status" id= "status">
          <option value="Pending">Pending</option>
          <option value="Completed">Completed</option>   
     </select> 
   </td></tr>
-  <tr><td>Remarks</td><td><textarea id="remarks" name="remarks" rows="4" cols="50"></textarea></td></tr>
+  <tr><td>Remarks *</td><td><textarea id="remarks" name="remarks" rows="4" cols="50"></textarea></td></tr>
   <tr><td>serialNo</td><td><input type="name" id="serialNo" name="serialNo" rows="4" cols="50"></textarea></td></tr>
-  <tr><td>Call Back Date</td><td><input type="date" id="date" name="Ncalldate" name="Ncalldate"></textarea></td></tr>
+  <tr><td>Call Back Date</td><td><input type="datetime-local" id="date" name="Ncalldate" name="Ncalldate"></textarea></td></tr>
   <tr><tr><td>Bill Type</td><td><select id="billtype" name="billtype">
         <option value="AMC">AMC</option>
         <option value="Free Support">Free Support</option> 
         <option value="Billing">Billing</option>
 </select></td></tr>
- <tr><tr><td>Software</td><td><select id="software" name="software">
+ <!-- <tr><tr><td>Software</td><td><select id="software" name="software">
         <option value="Tally">Tally</option>
         <option value="Busy">Busy</option> 
- </select></td></tr>
+ </select></td></tr> -->
   <tr><td>Completeperson</td><td><input type="name"  id="completeperson" name="completeperson"></td></tr>
-  <tr><td>Completeddate</td><td><input type="date"  id="completeddate" name="completeddate"></td></tr>
+  <tr><td>Completeddate</td><td><input type="datetime-local"  id="completeddate" name="completeddate"></td></tr>
   <tr><td><a href="{{route('home1')}}">Home Page</a></td><td align="center"><input type="submit" name="save"></td></tr>
 </table>
 </form>

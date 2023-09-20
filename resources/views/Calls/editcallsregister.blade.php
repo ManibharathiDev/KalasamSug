@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['name']))
+?>
 <!DOCTYPE html>
 <head>
   <title> Call Register</title>
@@ -57,6 +61,13 @@
   <option value ="{{$calls->staff_id}}">{{$data1->name}}
   </select> 
   </td></tr>
+  <tr><td>Call Allocation</td><td><select name="callallocation" id= "callallocation">
+           <option value ="{{$data1->name}}">{{$data1->name}}
+  @foreach($data2 as $row)
+           <Option value ="{{$row->name}}">{{$row->name}}
+        @endforeach
+        </select> 
+    </td></tr>
 <tr><td>Status</td></td><td><select name="status" id= "status">
          <option value="Pending">Pending</option>
          <option value="Completed">Completed</option> 
@@ -64,11 +75,11 @@
 </td></tr>
 <tr><td>Remarks</td><td><textarea id="remarks" name="remarks" rows="4" cols="50">{{$calls->remarks}}</textarea></td></tr>
 <tr><td>serialNo</td><td><input type="name" id="serialNo" name="serialNo" rows="4" cols="50" value="{{$calls->serialNo}}"></td></tr>
-<tr><td>Call Back Date</td><td><input type="datetime" id="Ncalldate" name="Ncalldate"></td></tr>
+<tr><td>Call Back Date</td><td><input type="datetime-local" id="Ncalldate" name="Ncalldate"></td></tr>
 <tr><tr><td>Bill Type</td><td><input type="billtype" id="billtype" name="billtype" value="{{$calls->billtype}}">     
 <tr><tr><td>Software</td><td><input type="name" id="software" name="software" value="{{$calls->software}}">
 <tr><td>Completeperson</td><td><input type="name"  id="completeperson" name="completeperson" value="{{$data->name}}"></td></tr>
-<tr><td>Completeddate</td><td><input type="datetime"  id="completeddate" name="completeddate"></td></tr>
+<tr><td>Completeddate</td><td><input type="datetime-local"  id="completeddate" name="completeddate"></td></tr>
 <tr><td></td><td align="center"><input type="submit" name="save"></td></tr>
 </table>
 </form>

@@ -92,7 +92,7 @@ span.forgotpsd a {
 </head>
 <body>
     <h1>Kalasam Info Tech</h1>
-    <form method="POST" action="{{route('adduser')}}">
+    <form method="POST" action="{{route('signup')}}">
     @if(Session::has('success'))
           <div class="alert-success">{{Session::get('success')}}</div>
         @endif

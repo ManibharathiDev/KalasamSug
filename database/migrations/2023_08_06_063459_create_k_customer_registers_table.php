@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('gstno')->nullable()->default(NULL);
             $table->string('refname')->nullable()->default(NULL);
             $table->string('pack')->nullable()->default(NULL);
-            $table->string('type')->nullable()->default(NULL);
+            $table->string('billtype')->nullable()->default(NULL);
+            $table->string('software')->nullable()->default(NULL);
             $table->timestamps();
         });
     }

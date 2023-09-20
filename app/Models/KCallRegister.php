@@ -22,27 +22,18 @@ class KCallRegister extends Model
     ];
     public function custname()
     {
-        return $this->hasOne(KCallRegister::class,'cust_id','id');
+        return $this->hasOne(KCustomerRegister::class,'id','cust_id');
+    }
+    public function staffname()
+    {
+        return $this->hasOne(User::class,'id','staff_id');
     }
     public function mycust()
     {
-        return $this->hasMany(KCallRegister::class,'id','cust_id');
+        return $this->hasMany(KCustomerRegister::class,'id','cust_id');
     }
     public function custnames()
     {
-        return $this->hasMany(KCallRegister::class, 
-        'cust_id',
-        'Date',
-        'phoneno',
-        'conperson',
-        'work',
-        'staff_id',
-        'status',
-        'remarks',
-        'serialNo',
-        'Ncalldate',
-        'billtype',
-        'completeperson',
-        'completeddate',);
+        return $this->hasMany(KCustomerRegister::class); 
     }
 }

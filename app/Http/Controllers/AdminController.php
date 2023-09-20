@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class APIController extends Controller
+class AdminController extends Controller
 {
-  
     public function userregistration(Request $request)
     {
         try
@@ -62,16 +61,13 @@ class APIController extends Controller
     public function loginpage() 
     { 
 	    $str_random=Str::random(12);
-	    return view('welcome',compact('str_random'));
+	    return view('index',compact('str_random'));
     }
     public function home() 
     { 
         $data = array();
         if(Session::has('loginId')){
             $data=User::where('id','=',Session::get('loginId'))->first();
-        }
-        else{
-            return redirect('/');
         }
 	    // $str_random=Str::random(12);
 	    return view('homepage',compact('data'));
@@ -80,11 +76,9 @@ class APIController extends Controller
     { 
         if(Session::has('loginId')){
             Session::pull('loginId');
+            //return redirect('home')->with('success','you logout successfully');
         }
-        else{
-            return redirect('/');
-        }
-        return view('welcome')->with('success','you logout successfully');
+        return view('index')->with('success','you logout successfully');
     }
     public function addcust() 
     { 
@@ -92,33 +86,21 @@ class APIController extends Controller
         if(Session::has('loginId')){
             $data=User::where('id','=',Session::get('loginId'))->first();
         }
-        else{
-            return redirect('/');
-        }
 	    $str_random=Str::random(12);
 	    return view('Customer/addcustomer',compact('data'));
     }
     public function custReport() 
     { 
         $data = array();
-       if(Session::has('loginId'))
-        {
+        if(Session::has('loginId')){
             $data=User::where('id','=',Session::get('loginId'))->first();
         }
-        else
-        {
-            return redirect('/');
-        }
-        $calls= KCallRegister::with('custname')
-        ->with('staffname')
-        ->whereDay('Date', now()->day)
-        ->orwhereDay('Ncalldate',now()->day)
-        ->get();
+         $calls= KCallRegister::whereDay('Date', now()->day)->get();
+         $calls1= KCallRegister::get();
          $cust = KCustomerRegister::all();
-         $data1 = User::all();
          $phoneno = KCallRegister::distinct()->whereNotNull('phoneno')->get(['phoneno']);
          //echo($phone);
-         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust,'phoneno'=>$phoneno,'$data1'=>$data1]);
+         return view('Calls/callsreport',compact('calls'),['data'=>$data,'cust'=>$cust,'phoneno'=>$phoneno]);
     }
     public function addcall()
     { 
@@ -126,13 +108,10 @@ class APIController extends Controller
         if(Session::has('loginId')){
             $data=User::where('id','=',Session::get('loginId'))->first();
         }
-        else{
-            return redirect('/');
-        }
 	    $str_random=Str::random(12);
         $cust=KCustomerRegister::all();
-        $data1=User::all();
-        return view('Calls/callregister',compact('data'),['cust'=>$cust,'data1'=>$data1]);
+        //$data=User::all();
+        return view('Calls/callregister',compact('data'),['cust'=>$cust]);
     }    
     public function addNewUser(Request $request)
     {
@@ -153,7 +132,7 @@ class APIController extends Controller
             $user->usertype=$request->usertype;        
             $res=$user->save();
             if($res){
-                return view('welcome')->with('success','you have register successfully');
+                return view('index')->with('success','you have register successfully');
             }
             else{
                 return back()->with('fail','something wrong');
@@ -189,18 +168,11 @@ class APIController extends Controller
             $cust->gstno = $request->gstno;
             $cust->refname = $request->refname;
             $cust->pack = $request->pack;
-            $cust->billtype=$request->billtype;
+            $cust->type=$request->type;
             $cust->software=$request->software;
             //print_r($cust);
             $cust->save();
             DB::commit();	
-            $data = array();
-            if(Session::has('loginId')){
-                $data=User::where('id','=',Session::get('loginId'))->first();
-            }
-            else{
-               return redirect('/');
-            }
             $str_random=Str::random(12);
             return view('Customer/addcustomer',compact('str_random'));
         }
@@ -220,15 +192,11 @@ class APIController extends Controller
             DB::beginTransaction();
             $calls = new KCallRegister;
             $calls->cust_id=$request->cust_id;
-            //$dt = now();
-            //echo $dt->format('Y-m-d H:i:s');
-            //exit();
             $calls->Date = date('Y-m-d H:i:s');
             $calls->phoneno=$request->phoneno;
             $calls->conperson=$request->conperson;
             $calls->work=$request->work;
             $calls->staff_id=$request->staff_id;
-            $calls->callallocation=$request->callallocation;
             $calls->status=$request->status;
             $calls->remarks=$request->remarks;
             $calls->serialNo=$request->serialNo;
@@ -242,15 +210,11 @@ class APIController extends Controller
             DB::commit();	
             $str_random=Str::random(12);
             $cust=KCustomerRegister::all();
-            $data1=User::all();
             $data = array();
             if(Session::has('loginId')){
                  $data=User::where('id','=',Session::get('loginId'))->first();
             }
-            else{
-                return redirect('/');
-            }
-            return view('Calls/callregister',compact('data'),['cust'=>$cust,'data1'=>$data1]);
+            return view('Calls/callregister',compact('data'),['cust'=>$cust]);
           
         }
         catch(\Exception $e)
@@ -265,9 +229,7 @@ class APIController extends Controller
     {
         $Sdate = $request->FDate;
         $Edate = $request->TDate;
-        $calls = KCallRegister::with('custname')
-        ->with('staffname')
-        ->whereDate('Date','>=',$Sdate)
+        $calls = KCallRegister::whereDate('Date','>=',$Sdate)
         ->whereDate('Date','<=',$Edate)
         ->orwhere('phoneno',$request->phoneno)
         ->orwhere('cust_id',$request->cust_id)
@@ -290,15 +252,11 @@ class APIController extends Controller
         $staffid = $calls->staff_id;        
         $cust  = KCustomerRegister::find($custid);
         $data1 = User::find($staffid);
-        $data2 = User::all();
         $data = array();
         if(Session::has('loginId')){
             $data=User::where('id','=',Session::get('loginId'))->first();
         }
-        else{
-            return redirect('/');
-        }
-        return view('Calls/editcallsregister',compact('calls'),['data'=>$data,'cust'=>$cust,'data1'=>$data1,'data2'=>$data2]);
+        return view('Calls/editcallsregister',compact('calls'),['data'=>$data,'cust'=>$cust,'data1'=>$data1]);
     }
     public function updateregister(Request $request)
     {
@@ -311,8 +269,7 @@ class APIController extends Controller
             $calls->phoneno=$request->phoneno;
             $calls->conperson=$request->conperson;
             $calls->work=$request->work;
-            $calls->staff_id=$request->staff_id;            
-            $calls->callallocation=$request->callallocation;
+            $calls->staff_id=$request->staff_id;
             $calls->status=$request->status;
             $calls->remarks=$request->remarks;
             $calls->serialNo=$request->serialNo;
@@ -323,15 +280,9 @@ class APIController extends Controller
             $calls->completeddate=$request->completeddate;
             //print_r($calls);
             $calls->save();
-            DB::commit();  
-            $data = array();
-            if(Session::has('loginId')){
-                $data=User::where('id','=',Session::get('loginId'))->first();
-            }
-            else{
-               return redirect('/');
-            }
-            return redirect('home');        
+            DB::commit();
+            $str_random=Str::random(12);
+	        return view('home',compact('str_random'));
         }
         catch(\Exception $e)
         {
@@ -342,3 +293,4 @@ class APIController extends Controller
         }
     }
 }
+

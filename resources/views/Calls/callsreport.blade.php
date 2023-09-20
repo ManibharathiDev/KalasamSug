@@ -1,3 +1,7 @@
+<?php
+    session_start();
+    if(!isset($_SESSION['name']))
+?>
 <!DOCTYPE html>
 <head>
   <title> Add Customer </title>
@@ -56,7 +60,8 @@
 <label> Call Status</label><select name="status" id= "status" cols="25">
          <option value="Pending">Pending</option>
          <option value="Completed">Completed</option>      
-</select>    
+</select>
+<br/>  <br/>  
 <label> Work </label><select name="work" id= "work" cols="25">
          <option value="Tally Support">Tally Support</option>
          <option value="Busy Support">Busy Support</option>
@@ -72,13 +77,15 @@
 </select> 
 <label> Bill Type</label><select name="billtype" id= "billtype" cols="25">
         <option value="AMC">AMC</option>
-        <option value="NoAMC">No AMC</option>       
+        <option value="Free Support">Free Support</option> 
+        <option value="Billing">Billing</option>      
 </select>  
 <label> Software</label><select name="software" id= "software" cols="25">
 <option value="Tally">Tally</option>
         <option value="Busy">Busy</option>       
 </select>  
 <input type="submit" name="submit">
+<br/><br/>
 <table border=1 class="css-serial">
  <tr><th>SNo</th>
  <th>Date</th>
@@ -86,7 +93,8 @@
  <th>Phone No</th>
  <th>Contact Person</th>
  <th>Work</th>
- <th>Call Attend Person</th>
+ <th>Create by</th>
+ <th>Call Allocated Person</th>
  <th>Status</th>
  <th>Remarks</th>
  <th>Serial No</th>
@@ -103,16 +111,17 @@
  <tr>
  <td>{{$i++}}</td>
  <td>{{$row->Date}}</td>
- <td>{{$row->cust_id}}</td>
+ <td>{{$row->custname->comname}}</td>
  <td>{{$row->phoneno}}</td>
  <td>{{$row->conperson}}</td>
  <td>{{$row->work}}</td>
- <td>{{$row->staff_id}}</td>
+ <td>{{$row->staffname->name}}</td>
+ <td>{{$row->callallocation}}</td>
  <td>{{$row->status}}</td>
  <td>{{$row->remarks}}</td>
- <td>{{$row->serialNo}}</td>
+ <td>{{$row->custname->serialNo}}</td>
  <td>{{$row->Ncalldate}}</td>
- <td>{{$row->billtype}}</td>
+ <td>{{$row->custname->billtype}}</td>
  <td>{{$row->completeperson}}</td>
  <td>{{$row->completeddate}}</td> 
  <td><a href="{{route('editcalls',[$row->id])}}">Edit</a></td>

@@ -18,7 +18,7 @@ return new class extends Migration
             ->onDelete('cascade');
             $table->string('phoneno');
             $table->string('conperson');
-            $table->string('Date');
+            $table->datetime('Date');
             $table->string('work');
             $table->unsignedBigInteger('staff_id');
             $table->foreign('staff_id')->references('id')->on('users')
@@ -26,10 +26,11 @@ return new class extends Migration
             $table->string('status');
             $table->string('remarks');
             $table->string('serialNo')->nullable()->default(NULL);
-            $table->string('Ncalldate')->nullable()->default(NULL);
+            $table->datetime('Ncalldate')->nullable()->default(NULL);
+            $table->text('software')->nullable()->default(NULL);
             $table->string('billtype')->nullable()->default(NULL);
             $table->string('completeperson')->nullable()->default(NULL);
-            $table->string('completeddate')->nullable()->default(NULL);
+            $table->datetime('completeddate')->nullable()->default(NULL);
             $table->timestamps();
         });
         
